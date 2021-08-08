@@ -4,6 +4,9 @@ const mealsEl = document.getElementById('meals');
 const faveContainer = document.getElementById('fave-container');
 const searchTerm = document.getElementById('search-term');
 const searchBtn = document.getElementById('search');
+const popOut = document.getElementById('meal-popup');
+const mealInfoEl = document.getElementById('meal-info')
+const closePopBtn = document.getElementById('close-popup')
 
 getRandomMeal();
 fetchFaveMeals();
@@ -13,8 +16,6 @@ async function getRandomMeal(){
     const res = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
     const resData = await res.json();
     const randomMeal = resData.meals[0];
-
-    // console.log(randomMeal)
 
    addMeal(randomMeal, true);
     
@@ -70,6 +71,10 @@ async function getMealsBySearch(term){
         }
             fetchFaveMeals();
         });
+
+        meal.addEventListener('click', ()=> {
+            showMealInfo(mealData);
+        })
         meals.appendChild(meal);
 }
 
@@ -111,6 +116,7 @@ function getMealsFromLS(){
 function addMealToFave(mealData){
 
     const faveMeal = document.createElement('li');
+
     faveMeal.innerHTML =
     ` 
     <img src="${mealData.strMealThumb}" alt="${mealData.strMeal}">
@@ -124,9 +130,46 @@ function addMealToFave(mealData){
 
         fetchFaveMeals();
     })
+
+    faveMeal.addEventListener('click', () => {
+        showMealInfo(mealData)
+    });
+
     faveContainer.appendChild(faveMeal);
 }
 
+
+function showMealInfo(mealData){
+    mealInfoEl.innerHTML ='';
+    let mealEl = document.createElement('div')
+
+    const ingredients = [];
+
+    for (let i =1; i<=20; i++){
+        if(mealData['strIngredient'+i]){
+            ingredients.push(`${mealData['strIngredient'+i]} - ${mealData['strMeasure'+i]}`);
+        } else {
+            break;
+        }
+    }
+
+    mealEl.innerHTML = `
+        <h1>${mealData.strMeal}</h1>
+        <img src ="${mealData.strMealThumb}" alt="${mealData.strMeal}">
+        <h2>Ingredients</h2>
+        <ul>
+            ${ingredients.map(ing => `
+            <li>${ing}</li>
+            `).join('')}
+        </ul>
+        <h2>Instructions</h2>
+        <p>${mealData.strInstructions}</p>
+     
+    `
+
+    mealInfoEl.appendChild(mealEl)
+    popOut.classList.remove('hidden')
+}
 
 searchBtn.addEventListener('click', async () => {
     mealsEl.innerHTML = '';
@@ -140,4 +183,8 @@ searchBtn.addEventListener('click', async () => {
             addMeal(meal);
         }) 
     }
+})
+
+closePopBtn.addEventListener('click', () => {
+    popOut.classList.add('hidden')
 })

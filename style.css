@@ -60,6 +60,7 @@ header button {
   width: 85px;
   position: relative;
   width: 75px;
+  cursor: pointer;
 }
 .fave-meals li .clear {
   background-color: transparent;
@@ -96,6 +97,7 @@ header button {
   box-shadow: 0 0 10px 2px #3333331a;
   border-radius: 3px;
   overflow: hidden;
+  cursor: pointer;
 }
 .meal-header {
   position: relative;
@@ -131,4 +133,42 @@ header button {
 }
 .meal-body .fave-btn.active {
   color: rebeccapurple;
+}
+.popup-container {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.popup-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.popup {
+  background-color: white;
+  border-radius: 5px;
+  padding: 0 2rem;
+  max-height: 100vh;
+  max-width: 800px;
+  margin: 2rem;
+  overflow: auto;
+  width: 100%;
+  position: relative;
+}
+.meal-info h1 {
+  text-align: center;
+}
+.popup .close-popout {
+  background: transparent;
+  border: none;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
 }
