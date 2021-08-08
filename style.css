@@ -5,4 +5,62 @@
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
+  background: #ece9e6;
+  background: -webkit-linear-gradient(to right, #ffffff, #ece9e6);
+  background: linear-gradient(to right, #ffffff, #ece9e6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  min-height: 100vh;
+}
+img {
+  max-width: 100%;
+}
+.mobile-container {
+  width: 400px;
+  background-color: white;
+  box-shadow: 0 0 10px 2px #3333331a;
+  border-radius: 3px;
+  overflow: hidden;
+}
+header {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+header input {
+  border: none;
+  background-color: #eee;
+  border-radius: 3px;
+  padding: 0.5rem 1rem;
+}
+header button {
+  background-color: transparent;
+  color: #aaa;
+  font-size: 1.5rem;
+  border: none;
+  margin-left: 10px;
+}
+.fave-container {
+  background-color: rgb(233, 199, 255);
+  padding: 1rem;
+  text-align: center;
+}
+.fave-meals {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+}
+.fave-meals li {
+}
+.fave-meals li img {
+  height: 75px;
+  width: 75px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.fave-meals li span {
+  font-size: 1rem;
 }
