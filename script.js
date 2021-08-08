@@ -1,6 +1,9 @@
 
 
-const meals = document.getElementById('meals')
+const mealsEl = document.getElementById('meals');
+const faveContainer = document.getElementById('fave-container');
+const searchTerm = document.getElementById('search-term');
+const searchBtn = document.getElementById('search');
 
 getRandomMeal();
 fetchFaveMeals();
@@ -26,11 +29,16 @@ async function getMealById(id){
 
 };
 
-// async function getMealsBySearch(term){
-//    const meals = await fetch('www.themealdb.com/api/json/v1/1/search.php?s='+term)
-//    console.log(meals)
+async function getMealsBySearch(term){
+   const res = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s='+term)
 
-// };
+   const resData = await res.json();
+   const meals = resData.meals
+   
+   
+   return meals
+
+};
 
  function addMeal(mealData, random = false){
 
@@ -51,7 +59,7 @@ async function getMealById(id){
 
     const btn = meal.querySelector('.meal-body .fave-btn')
     btn.addEventListener('click', (e)=> {
-        console.log('clicked')
+       
         if(btn.classList.contains('active')) {
             removeMealFromLS(mealData.idMeal);
             btn.classList.remove('active')
@@ -60,7 +68,7 @@ async function getMealById(id){
             addMealToLS(mealData.idMeal);
             btn.classList.add('active')
         }
-            // btn.classList.toggle('active')
+            fetchFaveMeals();
         });
         meals.appendChild(meal);
 }
@@ -84,6 +92,9 @@ function getMealsFromLS(){
 }
 
  async function fetchFaveMeals(){
+     //clean container before fetching
+    faveContainer.innerHTML = "";
+
     const mealIds = getMealsFromLS();
 
     const meals = [];
@@ -93,7 +104,40 @@ function getMealsFromLS(){
 
         let meal = await getMealById(mealId);
 
-        meals.push(meal)
+        addMealToFave(meal)
     }
-    console.log('meals', meals)
+};
+
+function addMealToFave(mealData){
+
+    const faveMeal = document.createElement('li');
+    faveMeal.innerHTML =
+    ` 
+    <img src="${mealData.strMealThumb}" alt="${mealData.strMeal}">
+    <span>${mealData.strMeal}</span>
+    <button class ="clear"><i class="far fa-window-close"></i></button>
+    `;
+    
+    const btn = faveMeal.querySelector('.clear');
+    btn.addEventListener('click', () => {
+        removeMealFromLS(mealData.idMeal);
+
+        fetchFaveMeals();
+    })
+    faveContainer.appendChild(faveMeal);
 }
+
+
+searchBtn.addEventListener('click', async () => {
+    mealsEl.innerHTML = '';
+
+    const query = searchTerm.value;
+    
+    const meals = await getMealsBySearch(query);
+
+    if(meals){
+        meals.forEach((meal) => {
+            addMeal(meal);
+        }) 
+    }
+})
